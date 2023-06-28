@@ -1,3 +1,21 @@
-<resources>
-    <string name="app_name">MovilesSoftware2023A</string>
-</resources>
+
+    <resources>
+        <string name="app_name" translatable="false">MovilesSoftware2023A</string>
+        <string name="bienvenida" translatable="false">Bienvenida</string>
+        <string name="title_activity_aaciclo_vida" translatable="false">AACicloVida</string>
+        <!-- Strings used for fragments for navigation -->
+        <string name="first_fragment_label" translatable="false">First Fragment</string>
+        <string name="second_fragment_label" translatable="false">Second Fragment</string>
+        <string name="next" translatable="false">Next</string>
+        <string name="previous" translatable="false">Previous</string>
+
+        <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+        <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+        <string-array name="string_array_opciones_dialogo">
+            <item>Lunes</item>
+            <item>Martes</item>
+            <item>Miercoles</item>
+        </string-array>
+
+    </resources>
+

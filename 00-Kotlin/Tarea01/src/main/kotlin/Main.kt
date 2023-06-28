@@ -2,7 +2,7 @@ import java.io.File
 
 fun main() {
     val manejador = Manejador()
-manejador.inicializarInformacion()
+    manejador.inicializarInformacion()
     var opcion: Int
 
     do {
