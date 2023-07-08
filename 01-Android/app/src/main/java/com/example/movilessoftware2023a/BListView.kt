@@ -51,7 +51,6 @@ class BListView : AppCompatActivity() {
             }
             else -> super.onContextItemSelected(item)
         }
-
     }
 
     fun abrirDialogo(){

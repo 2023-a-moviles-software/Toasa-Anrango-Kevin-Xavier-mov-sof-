@@ -8,21 +8,34 @@
 
     <ListView
         android:id="@+id/lv_list_view"
-        android:layout_width="287dp"
-        android:layout_height="304dp"
+        android:layout_width="286dp"
+        android:layout_height="350dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321" />
+        app:layout_constraintVertical_bias="0.629" />
 
     <Button
         android:id="@+id/btn_anadir_list_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
-        android:text="Añadir"
+        android:layout_marginBottom="48dp"
+        android:text="Crear"
+        app:layout_constraintBottom_toTopOf="@+id/lv_list_view"
         app:layout_constraintEnd_toEndOf="@+id/lv_list_view"
-        app:layout_constraintStart_toStartOf="@+id/lv_list_view"
-        app:layout_constraintTop_toBottomOf="@+id/lv_list_view" />
+        app:layout_constraintStart_toStartOf="@+id/lv_list_view" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="116dp"
+        android:text="SISTEMAS OPERATIVOS"
+        android:textSize="44px"
+        app:layout_constraintBottom_toTopOf="@+id/lv_list_view"
+        app:layout_constraintEnd_toEndOf="@+id/lv_list_view"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/lv_list_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

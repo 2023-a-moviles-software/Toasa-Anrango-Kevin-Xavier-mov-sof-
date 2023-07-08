@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                     if(result.data!!.data != null){
                         val uri: Uri = result.data!!.data!!
                         val cursor = contentResolver.query(uri, null, null, null, null, null)
+                        cursor?.moveToFirst()
                         val indiceTelefono = cursor?.getColumnIndex(
                             ContactsContract.CommonDataKinds.Phone.NUMBER
                         )
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        EBaseDeDatos.tableEntrenador =  ESqliteHelperEntrenador(this)
         val botonCicloVida = findViewById<Button>(
             R.id.btn_ciclo_vida
         )
