@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".formCrearPrograma">
+    <EditText
+        android:id="@+id/tv_nombrePrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/tv_versionPrograma"
+        app:layout_constraintEnd_toEndOf="@+id/tv_versionPrograma"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_versionPrograma" />
+
+    <EditText
+        android:id="@+id/tv_versionPrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:ems="10"
+        android:hint="Version"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/tv_almacenamientoPro"
+        app:layout_constraintEnd_toEndOf="@+id/tv_almacenamientoPro"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_almacenamientoPro" />
+
+    <EditText
+        android:id="@+id/tv_almacenamientoPro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:ems="10"
+        android:hint="Almacenamiento"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btn_crearPrograma"
+        app:layout_constraintEnd_toEndOf="@+id/btn_crearPrograma"
+        app:layout_constraintStart_toStartOf="@+id/btn_crearPrograma" />
+
+    <Button
+        android:id="@+id/btn_crearPrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.702" />
+</androidx.constraintlayout.widget.ConstraintLayout>

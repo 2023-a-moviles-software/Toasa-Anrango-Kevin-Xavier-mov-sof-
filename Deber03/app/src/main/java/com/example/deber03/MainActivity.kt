@@ -1,7 +1,6 @@
-package com.example.examen
+package com.example.deber03
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,41 +9,43 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 
-class BListView : AppCompatActivity() {
-    val arregloCopiaSistemaOpeativo = BBaseDatosMemoria.arregloBSistemaOperativo
+class MainActivity : AppCompatActivity() {
     val callbackContenidoIntentExplicito =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
-        ){
-                result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                if(result.data != null){
-                    //Lógica de negocio
-
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result.data != null) {
+                    // Lógica de negocio
                     val data = result.data
                     val nuevoNombreSO = "${data?.getStringExtra("nuevoNombreSO")}"
-
                     val nuevaVersionSO = "${data?.getStringExtra("nuevoVersionSO")}"
                     val nuevaDistribucion = "${data?.getStringExtra("nuevaDistribucion")}"
 
-                    val nuevoSistemaOperativo = BSistemaOperativo(
-                        4, nuevoNombreSO, nuevaVersionSO, nuevaDistribucion, ArrayList<BPrograma>()
-                    )
+                    // Crear el sistema operativo
+                    EBaseDatos.tabla_SO_PR?.crearSistemaOperativo(nuevoNombreSO, nuevaVersionSO, nuevaDistribucion)
 
-                    arregloCopiaSistemaOpeativo.add(nuevoSistemaOperativo)
-                    BBaseDatosMemoria.arregloBSistemaOperativo = arregloCopiaSistemaOpeativo
-
+                    // Actualizar la lista de sistemas operativos en el adaptador
                     val listView = findViewById<ListView>(R.id.lv_list_view)
                     val adaptador = listView.adapter as ArrayAdapter<BSistemaOperativo>
+                    adaptador.clear() // Limpiar la lista actual en el adaptador
+                    val nuevaListaSistemasOperativos = EBaseDatos.tabla_SO_PR?.consultarTablaSistemaOperativo()
+                    if (nuevaListaSistemasOperativos != null) {
+                        adaptador.addAll(nuevaListaSistemasOperativos) // Agregar la nueva lista al adaptador
+                    }
+
+                    // Notificar al adaptador que los datos han cambiado
                     adaptador.notifyDataSetChanged()
                 }
             }
         }
-
     val callbackContenidoIntentExplicitoEditar =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -55,52 +56,77 @@ class BListView : AppCompatActivity() {
                     val nuevaDistribucion = data?.getStringExtra("nuevaDistribucion")
                     val positionSO = data?.getIntExtra("positionSO", -1)
 
+                    // obtener informacion del elemento
+                    val listView = findViewById<ListView>(R.id.lv_list_view)
+                    val adaptador = listView.adapter as ArrayAdapter<BSistemaOperativo>
+                    val listaSistemasOperativos = adaptador.getItem(positionSO!!)
+                    val idSO = listaSistemasOperativos?.id
                     if (positionSO != null && positionSO != -1) {
-                        val sistemaOperativo = arregloCopiaSistemaOpeativo[positionSO]
-                        sistemaOperativo.nombreSO = nuevoNombreSO
-                        sistemaOperativo.version = nuevaVersionSO
-                        sistemaOperativo.distribucion = nuevaDistribucion
-                        BBaseDatosMemoria.arregloBSistemaOperativo[positionSO] = sistemaOperativo
+                        //Actualizar Base de datos
+                        if (idSO != null && nuevoNombreSO != null && nuevaVersionSO != null && nuevaDistribucion != null) {
+                            EBaseDatos.tabla_SO_PR?.actualizarSOFormulario(idSO, nuevoNombreSO, nuevaVersionSO, nuevaDistribucion)
+                        }
+                        // Actualizar la lista de sistemas operativos en el adaptador
                         val listView = findViewById<ListView>(R.id.lv_list_view)
                         val adaptador = listView.adapter as ArrayAdapter<BSistemaOperativo>
+                        adaptador.clear() // Limpiar la lista actual en el adaptador
+                        val nuevaListaSistemasOperativos = EBaseDatos.tabla_SO_PR?.consultarTablaSistemaOperativo()
+                        if (nuevaListaSistemasOperativos != null) {
+                            adaptador.addAll(nuevaListaSistemasOperativos) // Agregar la nueva lista al adaptador
+                        }
+                        // Notificar al adaptador que los datos han cambiado
                         adaptador.notifyDataSetChanged()
                     }
                 }
             }
         }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_blist_view)
+        setContentView(R.layout.activity_main)
+        EBaseDatos.tabla_SO_PR = ESqliteHelper(this)
 
         //Adaptador personalizado
         val listView = findViewById<ListView>(R.id.lv_list_view)
-        val adaptador = object : ArrayAdapter<BSistemaOperativo>(
-            this,
-            android.R.layout.simple_list_item_1,
-            BBaseDatosMemoria.arregloBSistemaOperativo
-        ) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                //Tomar solo el nombre del sistema Operativo
-                val nombreSO = BBaseDatosMemoria.arregloBSistemaOperativo[position].nombreSO
-                view.findViewById<TextView>(android.R.id.text1).text = nombreSO
-                return view
+        var datosSistemaOperativo = EBaseDatos.tabla_SO_PR?.consultarTablaSistemaOperativo()
+        if (datosSistemaOperativo == null || datosSistemaOperativo.isEmpty()) {
+            for (sistemaOperativo in listaSistemaOperativo.arregloSistemaOperativo) {
+                val nombreSO = sistemaOperativo.nombreSO
+                val version = sistemaOperativo.version
+                val distribucion = sistemaOperativo.distribucion
+
+                if (nombreSO != null && version != null && distribucion != null) {
+                    EBaseDatos.tabla_SO_PR?.crearSistemaOperativo(nombreSO, version, distribucion)
+                }
+            }
+            for (programa in listaPrograma.arregloProgramas) {
+                val idSO = programa.idSO
+                val nombrePrograma = programa.nombrePrograma
+                val almacenamiento = programa.almacenamiento
+                val version = programa.version
+
+                if (nombrePrograma != null && almacenamiento != null && version != null) {
+                    EBaseDatos.tabla_SO_PR?.crearPrograma(idSO, nombrePrograma, almacenamiento, version)
+                }
             }
         }
+
+
+        val adaptador = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            EBaseDatos.tabla_SO_PR?.consultarTablaSistemaOperativo() ?: emptyList()
+        )
         listView.adapter = adaptador
         adaptador.notifyDataSetChanged()
+
         val botonAniadirListView = findViewById<Button>(R.id.btn_anadir_list_view)
         botonAniadirListView.setOnClickListener(){
             crearSistemaOperativo(FormCrearSO::class.java)
         }
         registerForContextMenu(listView)
     }
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?){
         super.onCreateContextMenu(menu, v, menuInfo)
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
@@ -127,13 +153,14 @@ class BListView : AppCompatActivity() {
             else -> super.onContextItemSelected(item)
         }
     }
+
     fun abrirDialogo(position: Int){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Desea elminar?")
         builder.setPositiveButton(
             "Aceptar",
             DialogInterface.OnClickListener(){
-                    dialog, which ->  eliminarElemento(position)//Hacer Algo
+                    dialog, which ->  eliminarElemento(position)
             }
         )
         builder.setNegativeButton("Cancelar", null)
@@ -143,10 +170,19 @@ class BListView : AppCompatActivity() {
     }
 
     fun eliminarElemento(position: Int) {
-        arregloCopiaSistemaOpeativo.removeAt(position)
-        BBaseDatosMemoria.arregloBSistemaOperativo = arregloCopiaSistemaOpeativo
+
         val listView = findViewById<ListView>(R.id.lv_list_view)
         val adaptador = listView.adapter as ArrayAdapter<BSistemaOperativo>
+
+        // Obtener la lista actual de elementos y eliminar el elemento en la posición dada
+        val listaSistemasOperativos = adaptador.getItem(position)
+        val idSO = listaSistemasOperativos?.id
+        if (idSO != null) {
+            EBaseDatos.tabla_SO_PR?.eliminarSOFormulario(idSO)
+        }
+        adaptador.remove(listaSistemasOperativos)
+
+        // Notificar al adaptador que los datos han cambiado
         adaptador.notifyDataSetChanged()
     }
 
@@ -156,19 +192,14 @@ class BListView : AppCompatActivity() {
         callbackContenidoIntentExplicito.launch(intentExplicito)
     }
 
-
-
-
-    private fun mostrarProgramas(position: Int) {
-        val intent = Intent(this, listaProgramas::class.java)
-        intent.putExtra("position", position)
-        startActivity(intent)
-    }
-
     private fun editarSistemaOperativo(position: Int, clase: Class<*>) {
         val intentExplicitoEditarSO = Intent(this, clase)
         intentExplicitoEditarSO.putExtra("positionSO", position)
         callbackContenidoIntentExplicitoEditar.launch(intentExplicitoEditarSO)
     }
-
+    fun mostrarProgramas(position: Int) {
+        val intent = Intent(this, listaProgramas::class.java)
+        intent.putExtra("position", position)
+        startActivity(intent)
+    }
 }
