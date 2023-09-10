@@ -105,4 +105,15 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+    <Button
+        android:id="@+id/btn_intent_firestore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="FireStore"
+        app:layout_constraintEnd_toEndOf="@+id/btn_google_maps"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="@+id/btn_google_maps"
+        app:layout_constraintTop_toBottomOf="@+id/btn_google_maps" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
