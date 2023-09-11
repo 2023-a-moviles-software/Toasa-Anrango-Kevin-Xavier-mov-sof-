@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             .setOnClickListener {
                 irActividad(FRecyclerView::class.java)
             }
-        val botonFireStore = findViewById<Button>(R.id.btn_intent_firebase_ui)
+        val botonFireStore = findViewById<Button>(R.id.btn_intent_firestore)
         botonFireStore
             .setOnClickListener {
                 irActividad(IFirestore::class.java)
